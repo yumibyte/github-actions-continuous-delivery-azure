@@ -12,7 +12,7 @@ env:
   #################################################
   #################################################
   ### REPLACE USERNAME WITH GH USERNAME         ###
-  AZURE_WEBAPP_NAME: yumibyte-ttt-app
+  AZURE_WEBAPP_NAME: yumibyte-ttt-app-stage
   #################################################
 
 jobs:
@@ -66,7 +66,7 @@ jobs:
         with:
           login-server: ${{env.IMAGE_REGISTRY_URL}}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PACKAGE_TOKEN }}
 
       - name: Deploy web app container
         uses: azure/webapps-deploy@v2
