@@ -8,6 +8,7 @@ env:
   PACKAGES_TOKEN: ${{secrets.PACKAGES_TOKEN}}
   AZURE_RESOURCE_GROUP: cd-with-actions
   AZURE_APP_PLAN: actions-ttt-deployment
+  AZURE_APP_PLAN_STAGE: actions-ttt-deployment-stage
   AZURE_LOCATION: '"Central US"'
   #################################################
   ### USER PROVIDED VALUES ARE REQUIRED BELOW   ###
@@ -42,12 +43,13 @@ jobs:
         if: success()
         run: |
           az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN_STAGE}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
 
       - name: Create webapp resource
         if: success()
         run: |
           az webapp create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --plan ${{ env.AZURE_APP_PLAN }} --name ${{ env.AZURE_WEBAPP_NAME }}  --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
-          az webapp create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --plan ${{ env.AZURE_APP_PLAN }} --name ${{ env.AZURE_WEBAPP_NAME_STAGE }}  --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          az webapp create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --plan ${{ env.AZURE_APP_PLAN_STAGE }} --name ${{ env.AZURE_WEBAPP_NAME_STAGE }}  --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
 
       - name: Configure webapp to use GitHub Packages
         if: success()
